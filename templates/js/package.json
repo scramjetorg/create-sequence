@@ -1,0 +1,19 @@
+{
+  "name": "new-seq",
+  "version": "1.0.0",
+  "description": "Scramjet Cloud Platform Sequence Template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme"
+}

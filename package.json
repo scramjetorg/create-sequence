@@ -1,19 +1,66 @@
 {
-  "name": "new-seq",
+  "name": "@scramjet/create-sequence",
   "version": "1.0.0",
-  "description": "Scramjet Cloud Platform Sequence Template",
-  "main": "index.js",
+  "--todo--description": "Create `esm` enabled packages.",
+  "--todo--keywords": ["commonjs", "ecmascript", "export", "import", "modules", "node", "require"],
+  "repository": "scramjetorg/create-sequence",
+  "license": "MIT",
+  "author": "Scramjet <open-source@scramjet.org>",
+  "authors": [
+    "Scramjet <open-source@scramjet.org>",
+    "John-David Dalton <john.david.dalton@gmail.com>"
+  ],
+  "bin": "create-sequence.js",
+  "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
+    "precommit": "npm run lint",
+    "prepare": "npm run build:prod",
+    "prepub": "npm run build:prod",
+    "build": "node script/build.js",
+    "build:prod": "npm run build -- --prod",
+    "clean": "node script/clean.js",
+    "lint": "eslint '**/*.js' --fix --quiet",
+    "pub": "node script/publish.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
+    "@babel/plugin-transform-block-scoping": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-for-of-as-array": "^1.1.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "babel-plugin-transform-remove-debugger": "^6.9.4",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^7.0.1",
+    "execa": "^1.0.0",
+    "fs-extra": "^7.0.1",
+    "globby": "^8.0.2",
+    "golden-fleece": "^1.0.9",
+    "optimize-js-plugin": "0.0.4",
+    "pkg-install": "0.0.5",
+    "semver": "^5.7.0",
+    "terser": "^3.17.0",
+    "terser-webpack-plugin": "^1.2.3",
+    "trash": "^4.3.0",
+    "unused-webpack-plugin": "^2.3.1",
+    "webpack": "^4.30.0",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.2",
+    "yargs": "^12.0.5"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/scramjetorg/create-sequence/issues"
-  },
-  "homepage": "https://github.com/scramjetorg/create-sequence#readme"
+  "files": [
+    "create-esm",
+    "fixtures/.yarn.js",
+    "fixtures/.yarnrc",
+    "fixtures/index.js",
+    "fixtures/main.js"
+  ]
 }
