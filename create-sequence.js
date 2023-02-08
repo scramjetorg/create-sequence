@@ -22,7 +22,13 @@ function initFiles() {
 
   const pkgString = fs.readFileSync(pkgPath, "utf8")
   const pkgJSON = JSON.parse(pkgString)
-  const fixturesPath = path.resolve(__dirname, "fixtures", templateName)
+  const fixturesPath = path.join(__dirname, "fixtures", path.resolve("/", templateName))
+
+  if (! fs.existsSync(fixturesPath)) {
+    throw new Error(`Template ${templateName} couldn't be found`);
+  }
+
+
   const fixturePkgJSON = (() => {
     try {
       return JSON.parse(fs.readFileSync(path.resolve(fixturesPath, "package.json"), "utf8"));
@@ -34,7 +40,7 @@ function initFiles() {
   })()
 
   fse.copySync(fixturesPath, path.resolve())
-  fs.writeFileSync(pkgPath, JSON.stringify({...pkgJSON, ...fixturePkgJSON}, null, 2));
+  fs.writeFileSync(pkgPath, JSON.stringify({...fixturePkgJSON, ...pkgJSON}, null, 2));
 }
 
 function initPackage(pkgManager) {
