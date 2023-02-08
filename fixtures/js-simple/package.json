@@ -1,7 +1,7 @@
 {
-  "name": "new-seq",
+  "name": "@scramjet/js-simple",
   "version": "1.0.0",
-  "description": "Scramjet Cloud Platform Sequence Template",
+  "description": "Scramjet Cloud Platform Sequence Javascript Template",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
