@@ -6,17 +6,15 @@ module.exports = {
     mocha: true,
     node: true
   },
-  extends: ["eslint:recommended", "plugin:import/errors"],
+  extends: ["eslint:recommended"],
   globals: {
     __non_webpack_require__: false
   },
-  parser: "eslint-plugin-import/memo-parser",
   parserOptions: {
     ecmaVersion: 9,
-    parser: "babel-eslint",
-    sourceType: "module"
+    sourceType: "commonjs"
   },
-  plugins: ["import", "node"],
+  plugins: ["node"],
   root: true,
   rules: {
     "arrow-parens": "error",
@@ -25,9 +23,6 @@ module.exports = {
     "comma-dangle": "error",
     curly: "error",
     "eol-last": "error",
-    "import/no-duplicates": "error",
-    "import/no-extraneous-dependencies": ["error", { packageDir: "./" }],
-    "import/prefer-default-export": "error",
     "keyword-spacing": "error",
     "no-console": ["error", { allow: ["error"] }],
     "no-constant-condition": ["error", { checkLoops: false }],
@@ -44,7 +39,6 @@ module.exports = {
     quotes: ["error", "double", { allowTemplateLiterals: true, avoidEscape: true }],
     "rest-spread-spacing": "error",
     semi: ["error", "never"],
-    "sort-keys": ["error", "asc", { caseSensitive: true, natural: true }],
     "sort-vars": "error",
     "space-before-function-paren": ["error", { named: "never" }],
     "space-infix-ops": "error",

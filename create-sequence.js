@@ -1,68 +1,72 @@
 #!/usr/bin/env node
 
-"use strict";
+"use strict"
 
-const { getPackageManager } = require("pkg-install");
+const fse = require("fs-extra")
+const init = require("init-package-json")
+const fs = require("fs/promises")
+const path = require("path")
 
-const Module = require("module");
-const fse = require('fs-extra');
+const templateName = process.argv[2] || "default"
 
-const execa = require("execa");
-const fs = require("fs");
-const path = require("path");
+const exists = async (path) => {
+  return fs.access(path)
+    .then(
+      () => true,
+      () => false
+    )
+}
 
-const templateName = process.argv[2] || "default";
-
-function initFiles() {
+async function initFiles() {
   const pkgPath = path.resolve("package.json")
-
-  if (! fs.existsSync(pkgPath)) {
-    return
-  }
-
-  const pkgString = fs.readFileSync(pkgPath, "utf8")
-  const pkgJSON = JSON.parse(pkgString)
+  const pkgJSON = (await exists(pkgPath))
+    ? JSON.parse(await fs.readFile(pkgPath, "utf8"))
+    : {}
   const fixturesPath = path.join(__dirname, "fixtures", path.resolve("/", templateName))
 
-  if (! fs.existsSync(fixturesPath)) {
-    throw new Error(`Template ${templateName} couldn't be found`);
+  if (!(await exists(fixturesPath))) {
+    throw new Error(`Template ${templateName} couldn't be found`)
   }
 
-
-  const fixturePkgJSON = (() => {
+  const fixturePkgJSON = await (async () => {
     try {
-      return JSON.parse(fs.readFileSync(path.resolve(fixturesPath, "package.json"), "utf8"));
+      return JSON.parse(await fs.readFile(path.resolve(fixturesPath, "package.json"), "utf8"))
     } catch (_e) {
-      console.error(`WARN: Error while reading package.json from ${fixturesPath}`, _e);
-      
-      return {};
+      console.error(`WARN: Error while reading package.json from ${fixturesPath}`, _e)
+
+      return {}
     }
   })()
 
-  fse.copySync(fixturesPath, path.resolve())
-  fs.writeFileSync(pkgPath, JSON.stringify({...fixturePkgJSON, ...pkgJSON}, null, 2));
+  return {
+    pkgPath,
+    fixturesPath,
+    wdPath: path.resolve(),
+    pkgJSON,
+    fixturePkgJSON
+  }
 }
 
-function initPackage(pkgManager) {
-  const args = process.argv
-    .slice(3)
-    .filter((arg) => arg.startsWith("-")) 
-    // fix for --
+async function copyFiles(data) {
+  const { fixturesPath, wdPath } = data
 
-  return execa(pkgManager, ["init", ...args], {
-    stdio: "inherit"
-  })
+  await fse.copy(fixturesPath, wdPath, { filter: (src) => !src.endsWith("package.json") })
+  return data
 }
 
-getPackageManager({})
-  .then((pkgManager) =>
-    Promise
-      .resolve()
-      // Add a newline to stdout between the create-esm installation and
-      // the package initialization.
-      // eslint-disable-next-line no-console
-      .then(() => console.log(""))
-      .then(() => initPackage(pkgManager))
-      .then(() => initFiles(pkgManager))
-  )
+async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir }) {
+  const configData = { ...fixturePkgJSON, ...pkgJSON }
+  // eslint-disable-next-line no-undefined
+  return init(dir, undefined, configData)
+}
+
+Promise
+  .resolve()
+  // Add a newline to stdout between the create-esm installation and
+  // the package initialization.
+  // eslint-disable-next-line no-console
+  .then(() => console.log(""))
+  .then(initFiles)
+  .then(copyFiles)
+  .then(initPackage)
   .catch(console.error)

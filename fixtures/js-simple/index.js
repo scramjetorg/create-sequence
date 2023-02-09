@@ -1,1 +1,1 @@
-module.exports = async function*() { /* your code here */ };
+module.exports = async function*() { /* your code here */ }

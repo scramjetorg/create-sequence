@@ -12,8 +12,6 @@
     "engines": {
         "python3": "^3.8.0"
     },
-    "author": "",
-    "license": "ISC",
     "bugs": {
       "url": "https://github.com/scramjetorg/create-sequence/issues"
     },

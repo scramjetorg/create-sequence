@@ -24,17 +24,15 @@
     "node": ">=14"
   },
   "scripts": {
+    "start": "node ./create-sequence",
     "precommit": "npm run lint",
     "clean": "node script/clean.js",
     "lint": "eslint '**/*.js' --fix --quiet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
-    "globby": "^8.0.2",
-    "semver": "^5.7.0",
-    "pkg-install": "^0.0.5"
+    "init-package-json": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
