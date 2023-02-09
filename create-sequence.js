@@ -50,7 +50,7 @@ async function initFiles() {
 async function copyFiles(data) {
   const { fixturesPath, wdPath } = data
 
-  await fse.copy(fixturesPath, wdPath, { filter: (src) => !src.endsWith("package.json") })
+  await fse.copy(fixturesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
   return data
 }
 
