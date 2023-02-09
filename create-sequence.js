@@ -51,11 +51,14 @@ async function copyFiles(data) {
   const { fixturesPath, wdPath } = data
 
   await fse.copy(fixturesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
-  return data
+  return data;
 }
 
-async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir }) {
+async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir, pkgPath }) {
   const configData = { ...fixturePkgJSON, ...pkgJSON }
+
+  await fs.writeFile(pkgPath, JSON.stringify(configData));
+
   // eslint-disable-next-line no-undefined
   return init(dir, undefined, configData)
 }
