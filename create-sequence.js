@@ -22,17 +22,17 @@ async function initFiles() {
   const pkgJSON = (await exists(pkgPath))
     ? JSON.parse(await fs.readFile(pkgPath, "utf8"))
     : {}
-  const fixturesPath = path.join(__dirname, "fixtures", path.resolve("/", templateName))
+  const templatesPath = path.join(__dirname, "templates", path.resolve("/", templateName))
 
-  if (!(await exists(fixturesPath))) {
+  if (!(await exists(templatesPath))) {
     throw new Error(`Template ${templateName} couldn't be found`)
   }
 
   const fixturePkgJSON = await (async () => {
     try {
-      return JSON.parse(await fs.readFile(path.resolve(fixturesPath, "package.json"), "utf8"))
+      return JSON.parse(await fs.readFile(path.resolve(templatesPath, "package.json"), "utf8"))
     } catch (_e) {
-      console.error(`WARN: Error while reading package.json from ${fixturesPath}`, _e)
+      console.error(`WARN: Error while reading package.json from ${templatesPath}`, _e)
 
       return {}
     }
@@ -40,7 +40,7 @@ async function initFiles() {
 
   return {
     pkgPath,
-    fixturesPath,
+    templatesPath,
     wdPath: path.resolve(),
     pkgJSON,
     fixturePkgJSON
@@ -48,16 +48,16 @@ async function initFiles() {
 }
 
 async function copyFiles(data) {
-  const { fixturesPath, wdPath } = data
+  const { templatesPath, wdPath } = data
 
-  await fse.copy(fixturesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
-  return data;
+  await fse.copy(templatesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
+  return data
 }
 
 async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir, pkgPath }) {
   const configData = { ...fixturePkgJSON, ...pkgJSON }
 
-  await fs.writeFile(pkgPath, JSON.stringify(configData));
+  await fs.writeFile(pkgPath, JSON.stringify(configData))
 
   // eslint-disable-next-line no-undefined
   return init(dir, undefined, configData)
