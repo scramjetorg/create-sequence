@@ -1,6 +1,6 @@
 {
-  "name": "@scramjet/py-simple",
-  "description": "Scramjet Cloud Platform Python Sequence Template",
+  "name": "@scramjet/py-output",
+  "description": "Scramjet Cloud Platform Python Sequence Template which returns string",
   "main": "main.py",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
