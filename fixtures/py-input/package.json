@@ -1,6 +1,6 @@
 {
-  "name": "@scramjet/py-simple",
-  "description": "Scramjet Cloud Platform Python Sequence Template",
+  "name": "@scramjet/py-input2",
+  "description": "Scramjet Cloud Platform Python Sequence Template which includes framework's .each",
   "main": "main.py",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
