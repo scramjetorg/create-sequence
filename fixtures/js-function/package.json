@@ -1,0 +1,11 @@
+{
+  "main": "index.js",
+  "name": "js-function",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "Scramjet Cloud Platform JavaScript Sequence Template which includes function"
+}
