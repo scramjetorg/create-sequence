@@ -1,0 +1,22 @@
+{
+  "name": "@scramjet/js-stream",
+  "version": "1.0.0",
+  "description": "Scramjet Cloud Platform Sequence Javascript Template which includes stream",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "^16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme",
+  "author": "",
+  "license": "ISC"
+}

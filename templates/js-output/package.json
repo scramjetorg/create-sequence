@@ -1,7 +1,7 @@
 {
-  "name": "@scramjet/js-simple",
+  "name": "@scramjet/js-output",
   "version": "1.0.0",
-  "description": "Scramjet Cloud Platform Sequence Javascript Template",
+  "description": "Scramjet Cloud Platform Sequence Javascript Template which returns string",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,5 +16,7 @@
   "bugs": {
     "url": "https://github.com/scramjetorg/create-sequence/issues"
   },
-  "homepage": "https://github.com/scramjetorg/create-sequence#readme"
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme",
+  "author": "",
+  "license": "ISC"
 }
