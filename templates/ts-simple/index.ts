@@ -1,8 +1,8 @@
-import { ReadableApp  } from "@scramjet/types";
+import { WritableApp  } from "@scramjet/types";
 const {PassThrough} = require("stream");
 
 
-const mod: ReadableApp  = function(_input) {
+const mod: WritableApp  = function(_input) {
 	return PassThrough.from(_input)
         .map((chunk) => {
             return `${chunk}`;
