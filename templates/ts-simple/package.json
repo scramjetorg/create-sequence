@@ -13,7 +13,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "npm i && tsc -p tsconfig.json",
     "postbuild": "cp -r package.json dist/ && (cd dist && npm i --only=production)",
     "pack": "si seq pack ./dist/",
     "clean": "rm -rf ./dist ./*.tar.gz"
