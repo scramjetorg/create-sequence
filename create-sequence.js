@@ -8,7 +8,7 @@ const init = require("init-package-json")
 const fs = require("fs/promises")
 const path = require("path")
 
-const templateName = process.argv[2] || "default"
+const templateName = process.argv[2] || "js-simple"
 
 const exists = async (path) => {
   return fs.access(path)
