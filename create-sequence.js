@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 "use strict"
 
@@ -19,22 +20,22 @@ const exists = async (path) => {
 
 async function initFiles() {
   const pkgPath = path.resolve("package.json")
-  const pkgJSON = (await exists(pkgPath))
-    ? JSON.parse(await fs.readFile(pkgPath, "utf8"))
-    : {}
+
+  if (await exists(pkgPath)){
+    throw new Error("Error: package.json already exists in current location")
+  }
+
   const templatesPath = path.join(__dirname, "templates", path.resolve("/", templateName))
 
   if (!(await exists(templatesPath))) {
-    throw new Error(`Template ${templateName} couldn't be found`)
+    throw new Error(`Error: Template ${templateName} couldn't be found`)
   }
 
-  const fixturePkgJSON = await (async () => {
+  const templatePkgJSON = await (async () => {
     try {
       return JSON.parse(await fs.readFile(path.resolve(templatesPath, "package.json"), "utf8"))
     } catch (_e) {
-      console.error(`WARN: Error while reading package.json from ${templatesPath}`, _e)
-
-      return {}
+      throw new Error("Error while reading template package.json")
     }
   })()
 
@@ -42,34 +43,48 @@ async function initFiles() {
     pkgPath,
     templatesPath,
     wdPath: path.resolve(),
-    pkgJSON,
-    fixturePkgJSON
+    templatePkgJSON
   }
+}
+
+async function initPackage(data) {
+  const { templatePkgJSON, wdPath } = data
+
+  console.log("")
+  const result =  await init(wdPath, "", templatePkgJSON)
+  console.log("")
+
+  if (!result) {
+    throw new Error("Sequence template initialization canceled")
+  }
+
+  data.pkgJSON = { ...templatePkgJSON, ...result }
+  return data
 }
 
 async function copyFiles(data) {
   const { templatesPath, wdPath } = data
 
-  await fse.copy(templatesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
+  await fse.copy(templatesPath, wdPath, { overwrite: false, errorOnExist: true, filter: (src) => !src.endsWith("package.json") })
   return data
 }
 
-async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir, pkgPath }) {
-  const configData = { ...fixturePkgJSON, ...pkgJSON }
+async function copyPackage(data) {
+  const { pkgPath, pkgJSON } = data
 
-  await fs.writeFile(pkgPath, JSON.stringify(configData))
+  await fs.writeFile(pkgPath, JSON.stringify(pkgJSON, null, 2))
+  console.log("Sequence template succesfully created")
+  return data
+}
 
-  // eslint-disable-next-line no-undefined
-  return init(dir, undefined, configData)
+function errorHandler(error) {
+  console.error(error.message ? error.message : error)
 }
 
 Promise
   .resolve()
-  // Add a newline to stdout between the create-esm installation and
-  // the package initialization.
-  // eslint-disable-next-line no-console
-  .then(() => console.log(""))
   .then(initFiles)
-  .then(copyFiles)
   .then(initPackage)
-  .catch(console.error)
+  .then(copyFiles)
+  .then(copyPackage)
+  .catch(errorHandler)
