@@ -1,3 +1,3 @@
 async def run(context, input):
-   async for id in input:
-      yield f"id:{id}"
+	async for chunk in input:
+		yield chunk

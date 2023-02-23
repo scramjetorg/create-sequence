@@ -1,20 +1,20 @@
 {
-    "name": "@scramjet/py-simple",
-    "description": "Scramjet Cloud Platform Python Sequence Template",
-    "main": "main.py",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/scramjetorg/create-sequence.git"
-    },
-    "engines": {
-        "python3": "^3.8.0"
-    },
-    "bugs": {
-      "url": "https://github.com/scramjetorg/create-sequence/issues"
-    },
-    "homepage": "https://github.com/scramjetorg/create-sequence#readme"
-  }
-  
+  "name": "@scramjet/py-simple",
+  "version": "1.0.0",
+  "description": "Scramjet Cloud Platform Sequence Python Template",
+  "main": "main.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "python3": ">=3.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme"
+}
