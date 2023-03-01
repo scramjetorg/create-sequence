@@ -1,10 +1,11 @@
 {
-  "name": "@scramjet/ts-simple",
+  "name": "@scramjet/ts-generator",
   "version": "1.0.0",
   "description": "Scramjet Cloud Platform Sequence Typescript Template",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy" : "npm i && tsc -p tsconfig.json && cp -r package.json dist/ && mv node_modules dist"
   },
   "engines": {
     "node": ">=16"
@@ -18,6 +19,9 @@
   },
   "homepage": "https://github.com/scramjetorg/create-sequence#readme",
   "devDependencies": {
-    "@scramjet/types": "^0.31.2"
+    "@scramjet/types": "^0.31.2",
+    "typescript": "^4.9.4",
+    "@types/node": "15.12.5",
+    "scramjet": "^4.36.9"
   }
 }

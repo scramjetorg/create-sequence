@@ -1,0 +1,27 @@
+{
+  "name": "@scramjet/ts-transformer",
+  "version": "1.0.0",
+  "description": "Scramjet Cloud Platform Sequence Typescript Template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy" : "npm i && tsc -p tsconfig.json && cp -r package.json dist/ && mv node_modules dist"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme",
+  "devDependencies": {
+    "@scramjet/types": "^0.31.2",
+    "typescript": "^4.9.4",
+    "@types/node": "15.12.5",
+    "scramjet": "^4.36.9"
+  }
+}

@@ -1,10 +1,11 @@
 {
-  "name": "@scramjet/py-simple",
+  "name": "@scramjet/py-generator",
   "version": "1.0.0",
   "description": "Scramjet Cloud Platform Sequence Python Template",
   "main": "main.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy": "mkdir -p dist/__pypackages__/ && cp *.py package.json dist/ && pip3 install -t dist/__pypackages__/ -r requirements.txt"
   },
   "engines": {
     "python3": ">=3.8"
