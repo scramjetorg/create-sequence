@@ -4,7 +4,6 @@
   "description": "Scramjet Cloud Platform Sequence Typescript Template",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy" : "npm i && tsc -p tsconfig.json && cp -r package.json dist/ && mv node_modules dist"
   },
   "engines": {
