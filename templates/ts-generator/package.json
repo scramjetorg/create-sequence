@@ -4,7 +4,7 @@
   "description": "Scramjet Cloud Platform Sequence Typescript Template",
   "main": "index.js",
   "scripts": {
-    "predeploy" : "npm i && tsc -p tsconfig.json && cp -r package.json dist/ && mv node_modules dist"
+    "predeploy" : "tsc -p tsconfig.json && cp package.json dist/ && (cd dist && npm i --omit=dev)"
   },
   "engines": {
     "node": ">=16"
