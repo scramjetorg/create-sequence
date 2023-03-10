@@ -1,13 +1,13 @@
 {
-  "name": "@scramjet/js-simple",
+  "name": "@scramjet/py-transformer",
   "version": "1.0.0",
-  "description": "Scramjet Cloud Platform Sequence Javascript Template",
-  "main": "index.js",
+  "description": "Scramjet Cloud Platform Sequence Python Template",
+  "main": "main.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "predeploy": "mkdir -p dist/__pypackages__/ && cp *.py package.json dist/ && pip3 install -t dist/__pypackages__/ -r requirements.txt"
   },
   "engines": {
-    "node": ">=16"
+    "python3": ">=3.8"
   },
   "repository": {
     "type": "git",
