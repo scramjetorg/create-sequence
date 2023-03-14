@@ -19,9 +19,9 @@ const exists = async (path) => {
 }
 
 async function initFiles() {
-  const pkgPath = path.resolve("package.json")
+  const packageJsonPath = path.resolve("package.json")
 
-  if (await exists(pkgPath)){
+  if (await exists(packageJsonPath)) {
     throw new Error("Error: package.json already exists in current location")
   }
 
@@ -31,7 +31,18 @@ async function initFiles() {
     throw new Error(`Error: Template ${templateName} couldn't be found`)
   }
 
-  const templatePkgJSON = await (async () => {
+  const workingDirectory = path.resolve()
+
+  const workingDirectoryFiles = await fs.readdir(workingDirectory)
+  const templatesDirectoryFiles = await fs.readdir(templatesPath)
+
+  for (const file of templatesDirectoryFiles) {
+    if (workingDirectoryFiles.includes(file)) {
+      throw new Error(`Error: ${file} already exists in current location`)
+    }
+  }
+
+  const templatePackageJSON = await (async () => {
     try {
       return JSON.parse(await fs.readFile(path.resolve(templatesPath, "package.json"), "utf8"))
     } catch (_e) {
@@ -40,39 +51,46 @@ async function initFiles() {
   })()
 
   return {
-    pkgPath,
+    packageJsonPath,
     templatesPath,
-    wdPath: path.resolve(),
-    templatePkgJSON
+    workingDirectory,
+    templatePackageJSON
   }
 }
 
 async function initPackage(data) {
-  const { templatePkgJSON, wdPath } = data
+  const { templatePackageJSON, workingDirectory } = data
 
   console.log("")
-  const result =  await init(wdPath, "", templatePkgJSON)
+  const userPackageJSON = await init(workingDirectory, "", templatePackageJSON)
   console.log("")
 
-  if (!result) {
+  if (!userPackageJSON) {
     throw new Error("Sequence template initialization canceled")
   }
 
-  data.pkgJSON = { ...templatePkgJSON, ...result }
+  const packageJson = { ...templatePackageJSON, ...userPackageJSON }
+  if (userPackageJSON.scripts.test === 'echo "Error: no test specified" && exit 1') {
+    delete userPackageJSON.scripts.test
+  }
+
+  packageJson.scripts = { ...templatePackageJSON.scripts, ...userPackageJSON.scripts }
+  data.pkgJSON = packageJson
+
   return data
 }
 
 async function copyFiles(data) {
-  const { templatesPath, wdPath } = data
+  const { templatesPath, workingDirectory } = data
 
-  await fse.copy(templatesPath, wdPath, { overwrite: false, errorOnExist: true, filter: (src) => !src.endsWith("package.json") })
+  await fse.copy(templatesPath, workingDirectory, { overwrite: false, errorOnExist: true, filter: (src) => !src.endsWith("package.json") })
   return data
 }
 
 async function copyPackage(data) {
-  const { pkgPath, pkgJSON } = data
+  const { packageJsonPath, pkgJSON } = data
 
-  await fs.writeFile(pkgPath, JSON.stringify(pkgJSON, null, 2))
+  await fs.writeFile(packageJsonPath, JSON.stringify(pkgJSON, null, 2))
   console.log("Sequence template succesfully created")
   return data
 }
