@@ -11,9 +11,10 @@ module.exports = {
     __non_webpack_require__: false
   },
   parserOptions: {
-    ecmaVersion: 9,
+    ecmaVersion: "2020",
     sourceType: "commonjs"
   },
+  parser: "babel-eslint",
   plugins: ["node"],
   root: true,
   rules: {

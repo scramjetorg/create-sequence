@@ -59,10 +59,17 @@ async function initFiles() {
 }
 
 async function initPackage(data) {
-  const { templatePackageJSON, workingDirectory } = data
+  const { templatePackageJSON, packageJsonPath, workingDirectory } = data
 
   console.log("")
-  const userPackageJSON = await init(workingDirectory, "", templatePackageJSON)
+
+  {
+    const { name, version, main, engines } = templatePackageJSON;
+    await fs.writeFile(packageJsonPath, JSON.stringify({ name, version, main, engines }, null, 2))
+  }
+
+  const userPackageJSON = await init(workingDirectory, path.resolve(__dirname, "default-input.js"), templatePackageJSON)
+
   console.log("")
 
   if (!userPackageJSON) {
