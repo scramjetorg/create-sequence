@@ -19,10 +19,12 @@ const exists = async (path) => {
 }
 
 async function initFiles() {
-  const packageJsonPath = path.resolve("package.json")
+  const { INIT_CWD, PWD } = process.env;
+  const workingDirectory = path.resolve(INIT_CWD || PWD || undefined);
+  const packageJsonPath = path.resolve(workingDirectory, "package.json")
 
   if (await exists(packageJsonPath)) {
-    throw new Error("Error: package.json already exists in current location")
+    throw new Error(`Error: package.json already exists in "${packageJsonPath}"`)
   }
 
   const templatesPath = path.join(__dirname, "templates", path.resolve("/", templateName))
@@ -30,8 +32,6 @@ async function initFiles() {
   if (!(await exists(templatesPath))) {
     throw new Error(`Error: Template ${templateName} couldn't be found`)
   }
-
-  const workingDirectory = path.resolve()
 
   const workingDirectoryFiles = await fs.readdir(workingDirectory)
   const templatesDirectoryFiles = await fs.readdir(templatesPath)
@@ -64,7 +64,7 @@ async function initPackage(data) {
   console.log("")
 
   {
-    const { name, version, main, engines } = templatePackageJSON;
+    const { name, version, main, engines } = templatePackageJSON
     await fs.writeFile(packageJsonPath, JSON.stringify({ name, version, main, engines }, null, 2))
   }
 
