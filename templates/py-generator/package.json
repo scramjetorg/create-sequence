@@ -1,0 +1,20 @@
+{
+  "name": "@scramjet/py-generator",
+  "version": "1.0.0",
+  "description": "Scramjet Cloud Platform Sequence Python Template",
+  "main": "main.py",
+  "scripts": {
+    "predeploy": "mkdir -p dist/__pypackages__/ && cp *.py package.json dist/ && pip3 install -t dist/__pypackages__/ -r requirements.txt"
+  },
+  "engines": {
+    "python3": ">=3.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scramjetorg/create-sequence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scramjetorg/create-sequence/issues"
+  },
+  "homepage": "https://github.com/scramjetorg/create-sequence#readme"
+}

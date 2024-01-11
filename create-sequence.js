@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 "use strict"
 
@@ -7,7 +8,7 @@ const init = require("init-package-json")
 const fs = require("fs/promises")
 const path = require("path")
 
-const templateName = process.argv[2] || "default"
+const templateName = process.argv[2] || "js-transformer"
 
 const exists = async (path) => {
   return fs.access(path)
@@ -18,58 +19,97 @@ const exists = async (path) => {
 }
 
 async function initFiles() {
-  const pkgPath = path.resolve("package.json")
-  const pkgJSON = (await exists(pkgPath))
-    ? JSON.parse(await fs.readFile(pkgPath, "utf8"))
-    : {}
+  const { INIT_CWD, PWD } = process.env;
+  const workingDirectory = path.resolve(INIT_CWD || PWD || undefined);
+  const packageJsonPath = path.resolve(workingDirectory, "package.json")
+
+  if (await exists(packageJsonPath)) {
+    throw new Error(`Error: package.json already exists in "${packageJsonPath}"`)
+  }
+
   const templatesPath = path.join(__dirname, "templates", path.resolve("/", templateName))
 
   if (!(await exists(templatesPath))) {
-    throw new Error(`Template ${templateName} couldn't be found`)
+    throw new Error(`Error: Template ${templateName} couldn't be found`)
   }
 
-  const fixturePkgJSON = await (async () => {
+  const workingDirectoryFiles = await fs.readdir(workingDirectory)
+  const templatesDirectoryFiles = await fs.readdir(templatesPath)
+
+  for (const file of templatesDirectoryFiles) {
+    if (workingDirectoryFiles.includes(file)) {
+      throw new Error(`Error: ${file} already exists in current location`)
+    }
+  }
+
+  const templatePackageJSON = await (async () => {
     try {
       return JSON.parse(await fs.readFile(path.resolve(templatesPath, "package.json"), "utf8"))
     } catch (_e) {
-      console.error(`WARN: Error while reading package.json from ${templatesPath}`, _e)
-
-      return {}
+      throw new Error("Error while reading template package.json")
     }
   })()
 
   return {
-    pkgPath,
+    packageJsonPath,
     templatesPath,
-    wdPath: path.resolve(),
-    pkgJSON,
-    fixturePkgJSON
+    workingDirectory,
+    templatePackageJSON
   }
 }
 
-async function copyFiles(data) {
-  const { templatesPath, wdPath } = data
+async function initPackage(data) {
+  const { templatePackageJSON, packageJsonPath, workingDirectory } = data
 
-  await fse.copy(templatesPath, wdPath, { overwrite: false, filter: (src) => !src.endsWith("package.json") })
+  console.log("")
+
+  {
+    const { name, version, main, engines } = templatePackageJSON
+    await fs.writeFile(packageJsonPath, JSON.stringify({ name, version, main, engines }, null, 2))
+  }
+
+  const userPackageJSON = await init(workingDirectory, path.resolve(__dirname, "default-input.js"), templatePackageJSON)
+
+  console.log("")
+
+  if (!userPackageJSON) {
+    throw new Error("Sequence template initialization canceled")
+  }
+
+  const packageJson = { ...templatePackageJSON, ...userPackageJSON }
+  if (userPackageJSON.scripts.test === 'echo "Error: no test specified" && exit 1') {
+    delete userPackageJSON.scripts.test
+  }
+
+  packageJson.scripts = { ...templatePackageJSON.scripts, ...userPackageJSON.scripts }
+  data.pkgJSON = packageJson
+
   return data
 }
 
-async function initPackage({ fixturePkgJSON, pkgJSON, wdPath: dir, pkgPath }) {
-  const configData = { ...fixturePkgJSON, ...pkgJSON }
+async function copyFiles(data) {
+  const { templatesPath, workingDirectory } = data
 
-  await fs.writeFile(pkgPath, JSON.stringify(configData))
+  await fse.copy(templatesPath, workingDirectory, { overwrite: false, errorOnExist: true, filter: (src) => !src.endsWith("package.json") })
+  return data
+}
 
-  // eslint-disable-next-line no-undefined
-  return init(dir, undefined, configData)
+async function copyPackage(data) {
+  const { packageJsonPath, pkgJSON } = data
+
+  await fs.writeFile(packageJsonPath, JSON.stringify(pkgJSON, null, 2))
+  console.log("Sequence template succesfully created")
+  return data
+}
+
+function errorHandler(error) {
+  console.error(error.message ? error.message : error)
 }
 
 Promise
   .resolve()
-  // Add a newline to stdout between the create-esm installation and
-  // the package initialization.
-  // eslint-disable-next-line no-console
-  .then(() => console.log(""))
   .then(initFiles)
-  .then(copyFiles)
   .then(initPackage)
-  .catch(console.error)
+  .then(copyFiles)
+  .then(copyPackage)
+  .catch(errorHandler)

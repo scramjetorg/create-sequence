@@ -4,10 +4,10 @@ The [`Scramjet Cloud Platform`](https://docs.scramjet.org/platform) sequence pac
 initialization template ran by `npm init scramjetorg/sequence <template-name>`, for example:
 
 ```bash
-npm init scramjetorg/sequence py-simple
+npm init scramjetorg/sequence py-generator
 ```
 
-The command above will not create any sequence directory, main file and package.json will be created in a place from which `npm init ...` command was executed. We advise to create sequence directory first and then execute `npm init scramjetorg/sequence <template-name>` from there.
+The command above will not create any sequence directory, main files and package.json will be created in a place from which `npm init ...` command was executed. We advise to create sequence directory first and then execute `npm init scramjetorg/sequence <template-name>` from there. Then, if using typescript, use the `npm install` command.
 
 All templates are in `templates` directory. If you won't use any `<template-name>` in `npm init ...` command, like when you execute init command like this:
 
@@ -16,6 +16,23 @@ npm init scramjetorg/sequence
 ```
 
 the main file and package.json file will be created out of `templates/default`.
+
+## Running
+
+Open a terminal in the folder of the selected template, then use:
+
+```bash
+# If you run this sample on Self Hosted Hub, please start it with command:
+sth
+
+# Run predeploy script:
+npm run predeploy
+
+# Deploy sequence to STH:
+si seq deploy dist
+```
+
+And that's it, your code is running in the hub of your choice. :)
 
 ## Error handling
 
@@ -63,3 +80,5 @@ Error: package.json already exists in current location
 
 The Sequence initialization from the template must be done in the localization where there is no other `package.json` file.
 The command `npm init scramjetorg/sequence` does not include directory creation. Therefore, before you initiate sequence creation, create a new directory and run the `npm init scramjetorg/sequence` command from there.
+=======
+the main file and package.json file will be created out of `templates/js-transformer`.
