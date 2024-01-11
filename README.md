@@ -80,5 +80,3 @@ Error: package.json already exists in current location
 
 The Sequence initialization from the template must be done in the localization where there is no other `package.json` file.
 The command `npm init scramjetorg/sequence` does not include directory creation. Therefore, before you initiate sequence creation, create a new directory and run the `npm init scramjetorg/sequence` command from there.
-=======
-the main file and package.json file will be created out of `templates/js-transformer`.
