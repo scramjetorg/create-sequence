@@ -5,14 +5,14 @@ function sleep(ms) {
 }
 
 function getPageFromApi(){
-	return "Your result";
+    return "Your result";
 };
 
 const mod: ReadableApp = async function* () {
-	while(true){
-		yield await getPageFromApi();
-		await sleep(1000)
-	}
+    while(true){
+        yield await getPageFromApi();
+        await sleep(1000)
+    }
 }
 
 export default mod;
